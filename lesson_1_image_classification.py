@@ -2,8 +2,6 @@
 
 !pip install fastai --upgrade
 
-
-
 from fastai import *
 from fastai.vision import *
 
@@ -22,9 +20,6 @@ fnames
 np.random.seed(2)
 pat = re.compile(r'/([^/]+)_\d+.jpg$')
 
-data = ImageDataBunch.from_name_re(path_img, fnames, path, ds_tfms=get_transforms(), size=224)
-data = data.normalize(imagenet_stats)
-
 data = ImageDataBunch.from_name_re(path_img, fnames, pat, ds_tfms=get_transforms(), size=224)
 data = data.normalize(imagenet_stats)
 
@@ -35,17 +30,13 @@ data.show_batch(rows=3, figsize=(7,6))
 print(data.classes)
 len(data.classes),data.c
 
-learn = create_cnn(data, models.resnet34, pretrained=True, metrics=error_rate)
+learn = create_cnn(data, models.resnet34, pretrained=True, metrics=error_rate) # deprecated, use cnn_learner instead (next line)
 
 learn = cnn_learner(data, models.resnet34, pretrained=True, metrics=error_rate)
 
 learn.fit_one_cycle(4)
 
 learn.save('stage_1')
-
-interp = ClassificaitonInterpretation.from_learner(learn)
-losses,idxs = interp.top_losses()
-len(data.valid_ds)==len(losses)==len(idxs)
 
 interp = ClassificationInterpretation.from_learner(learn)
 losses,idxs = interp.top_losses()
