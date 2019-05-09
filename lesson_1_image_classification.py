@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 !pip install fastai --upgrade
 
 from fastai import *
